@@ -1,0 +1,32 @@
+[Unit]
+Description=Magang Berdampak API
+After=network.target
+Wants=network.target
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+RuntimeDirectory=magang-api
+RuntimeDirectoryMode=755
+WorkingDirectory=/opt/magang-berdampak-api/api_new
+Environment=PATH=/opt/magang-berdampak-api/venv/bin
+Environment=PYTHONPATH=/opt/magang-berdampak-api
+Environment=ENVIRONMENT=production
+ExecStart=/opt/magang-berdampak-api/venv/bin/gunicorn --config ../deployment/gunicorn.conf.py api_server:app
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=always
+RestartSec=5
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/magang-berdampak-api/database
+ReadWritePaths=/var/log/magang-api
+ReadWritePaths=/var/run/magang-api
+
+[Install]
+WantedBy=multi-user.target 

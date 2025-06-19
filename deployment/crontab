@@ -1,0 +1,16 @@
+# Magang Berdampak API - Scheduled Scraping
+# Runs every 6 hours at minutes 0
+# Format: minute hour day_of_month month day_of_week command
+
+# Run scraper every 6 hours
+0 */6 * * * cd /opt/magang-berdampak-api/scraper_new && /opt/magang-berdampak-api/venv/bin/python scraper.py >> /var/log/magang-api/scraper-cron.log 2>&1
+
+# Alternative schedules (choose one):
+# Every 4 hours: 0 */4 * * *
+# Every 8 hours: 0 */8 * * *
+# Every 12 hours: 0 */12 * * *
+# Daily at 2 AM: 0 2 * * *
+# Twice daily (2 AM and 2 PM): 0 2,14 * * *
+
+# Weekly maintenance - cleanup old logs (optional)
+0 1 * * 0 find /var/log/magang-api -name "*.log" -mtime +30 -delete 
